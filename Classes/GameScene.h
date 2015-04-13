@@ -23,7 +23,15 @@ public:
     
     Sprite* ball;
     Sprite* paddle;
-//    Sprite* edgeBody;
+    
+    void PauseGame();
+    void GameOver();
+    void StartGame();
+    
+    bool isGameover;
+    
+    
+    
     
 private:
     PhysicsWorld* sceneWorld;
@@ -36,6 +44,17 @@ private:
     void onTouchMoved(Touch* touch, Event* event);
     
     void setBlock();
+    
+    Size visibleSize;
+    Vec2 origin;
+    
+    MenuItemImage *pauseButton;
+    MenuItemImage *playButton;
+    Menu* menu;
+    Label* gameover;
+    void setUI();
+    
+    void update(float dt);
 };
 
 #endif /* defined(__BreakOut__GameScene__) */
