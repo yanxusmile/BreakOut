@@ -125,21 +125,21 @@ void GameScene::onTouchMoved(Touch* touch, Event* event)
 
 bool GameScene::onContactBegin( cocos2d::PhysicsContact &contact )
 {
-    auto spriteA = contact.getShapeA()->getBody()->getNode();
-    auto spriteB = contact.getShapeB()->getBody()->getNode();
-    int tagA = spriteA->getTag();
-    int tagB = spriteB->getTag();
+    auto nodeA = contact.getShapeA()->getBody()->getNode();
+    auto nodeB = contact.getShapeB()->getBody()->getNode();
     
-    if (tagA == 3)
+    if (nodeA && nodeB)
     {
-        spriteA->removeFromParentAndCleanup(true);
+        if (nodeA->getTag() == 3)
+        {
+            nodeA->removeFromParentAndCleanup(true);
+        }
+        else if (nodeB->getTag() == 3)
+        {
+            nodeB->removeFromParentAndCleanup(true);
+        }
     }
-    
-    if (tagB == 3)
-    {
-        spriteB->removeFromParentAndCleanup(true);
-    }
-    return true;
+        return true;
 }
 
 
@@ -150,12 +150,14 @@ void GameScene::setBlock()
         static int padding = 100;
         
         auto block = Sprite::create("block.png");
+        
         auto blockBody = PhysicsBody::createBox(block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
         blockBody->getShape(0)->setDensity(10.0f);
         blockBody->getShape(0)->setFriction(0.0f);
         blockBody->getShape(0)->setRestitution(1.f);
         blockBody->setContactTestBitmask(1);
         blockBody->setDynamic(false);
+        
         int xOffset = padding + block->getContentSize().width / 2 + ((block->getContentSize().width + padding)*i);
         block->setPosition(xOffset, 450);
         block->setPhysicsBody(blockBody);
@@ -188,10 +190,11 @@ void GameScene::setUI(){
 void GameScene::PauseGame()
 {
     Director::getInstance()->pause();
-//    ball->pauseSchedulerAndActions();
     ball->setVisible(false);
     playButton->setVisible(true);
     pauseButton->setVisible(false);
+    ball->pause();
+//    ActionManager::pauseTarget(ball);
 }
 
 void GameScene::GameOver()
@@ -217,7 +220,8 @@ void GameScene::StartGame()
         Director::getInstance()->resume();
         this->removeAllChildren();
         this->init();
-        
+//        auto scene = GameScene::createScene();
+//        Director::getInstance()->replaceScene(TransitionFade::create(1, scene));
         
     }
 }
