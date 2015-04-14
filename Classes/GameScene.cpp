@@ -193,8 +193,8 @@ void GameScene::PauseGame()
     ball->setVisible(false);
     playButton->setVisible(true);
     pauseButton->setVisible(false);
-    ball->pause();
-//    ActionManager::pauseTarget(ball);
+    Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(0);
+
 }
 
 void GameScene::GameOver()
@@ -213,6 +213,8 @@ void GameScene::StartGame()
         playButton->setVisible(false);
         pauseButton->setVisible(true);
         ball->setVisible(true);
+        Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
+
     }
     else
     {
@@ -220,6 +222,8 @@ void GameScene::StartGame()
         Director::getInstance()->resume();
         this->removeAllChildren();
         this->init();
+        Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
+
 //        auto scene = GameScene::createScene();
 //        Director::getInstance()->replaceScene(TransitionFade::create(1, scene));
         

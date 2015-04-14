@@ -48,6 +48,7 @@ private:
     Size visibleSize;
     Vec2 origin;
     
+    //UI
     MenuItemImage *pauseButton;
     MenuItemImage *playButton;
     Menu* menu;
