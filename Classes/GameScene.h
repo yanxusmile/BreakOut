@@ -29,6 +29,9 @@ public:
     void StartGame();
     
     bool isGameover;
+//    bool isWin;
+    
+    void tick(float dt);
     
     
     
@@ -53,6 +56,7 @@ private:
     MenuItemImage *playButton;
     Menu* menu;
     Label* gameover;
+    Label* gamewin;
     void setUI();
     
     void update(float dt);

@@ -7,6 +7,7 @@
 //
 
 #include "GameScene.h"
+#include "Brick.h"
 
 USING_NS_CC;
 
@@ -149,19 +150,21 @@ void GameScene::setBlock()
         
         static int padding = 100;
         
-        auto block = Sprite::create("block.png");
+        auto block = Brick::create();
+        block->initBrickSprite("block.png");
         
-        auto blockBody = PhysicsBody::createBox(block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
-        blockBody->getShape(0)->setDensity(10.0f);
-        blockBody->getShape(0)->setFriction(0.0f);
-        blockBody->getShape(0)->setRestitution(1.f);
-        blockBody->setContactTestBitmask(1);
-        blockBody->setDynamic(false);
+//        auto block = Sprite::create("block.png");
+//        
+//        auto blockBody = PhysicsBody::createBox(block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
+//        blockBody->getShape(0)->setDensity(10.0f);
+//        blockBody->getShape(0)->setFriction(0.0f);
+//        blockBody->getShape(0)->setRestitution(1.f);
+//        blockBody->setContactTestBitmask(1);
+//        blockBody->setDynamic(false);
         
         int xOffset = padding + block->getContentSize().width / 2 + ((block->getContentSize().width + padding)*i);
         block->setPosition(xOffset, 450);
-        block->setPhysicsBody(blockBody);
-        block->setTag(3);
+//        block->setTag(3);
         this->addChild(block);
     }
 }
@@ -185,12 +188,18 @@ void GameScene::setUI(){
     gameover->setColor(Color3B::WHITE);
     this->addChild(gameover, 2);
     
+    gamewin = Label::createWithTTF(ttfconfig, " You Win !",TextHAlignment::CENTER);
+    gamewin->setPosition(Point(visibleSize.width/2,visibleSize.height/2+gameover->getContentSize().height));
+    gamewin->setVisible(false);
+    gamewin->setColor(Color3B::WHITE);
+    this->addChild(gamewin, 2);
 }
 
 void GameScene::PauseGame()
 {
     Director::getInstance()->pause();
     ball->setVisible(false);
+    paddle->setVisible(false);
     playButton->setVisible(true);
     pauseButton->setVisible(false);
     Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(0);
@@ -213,6 +222,7 @@ void GameScene::StartGame()
         playButton->setVisible(false);
         pauseButton->setVisible(true);
         ball->setVisible(true);
+        paddle->setVisible(true);
         Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
 
     }
@@ -223,10 +233,6 @@ void GameScene::StartGame()
         this->removeAllChildren();
         this->init();
         Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
-
-//        auto scene = GameScene::createScene();
-//        Director::getInstance()->replaceScene(TransitionFade::create(1, scene));
-        
     }
 }
 
@@ -236,4 +242,25 @@ void GameScene::update(float dt)
     {
         GameOver();
     }
+    tick(dt);
 }
+
+void GameScene::tick(float dt)
+{
+    bool isWin = true;
+    Vector<PhysicsBody*> bodies = sceneWorld->getAllBodies();
+    for (auto body : bodies)
+    {
+        if (body->getNode()->getTag() == 3)
+        {
+            isWin = false;
+        }
+    }
+    if (isWin == true)
+    {
+        GameOver();
+    }
+}
+
+
+
