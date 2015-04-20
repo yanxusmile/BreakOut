@@ -7,7 +7,7 @@
 //
 
 #include "GameScene.h"
-#include "Brick.h"
+#include "BrickFactory.h"
 
 USING_NS_CC;
 
@@ -133,11 +133,11 @@ bool GameScene::onContactBegin( cocos2d::PhysicsContact &contact )
     {
         if (nodeA->getTag() == 3)
         {
-            nodeA->removeFromParentAndCleanup(true);
+            nodeA->getParent()->removeFromParentAndCleanup(true);
         }
         else if (nodeB->getTag() == 3)
         {
-            nodeB->removeFromParentAndCleanup(true);
+            nodeB->getParent()->removeFromParentAndCleanup(true);
         }
     }
         return true;
@@ -150,17 +150,10 @@ void GameScene::setBlock()
         
         static int padding = 100;
         
-        auto block = Brick::create();
-        block->initBrickSprite("block.png");
-        
-//        auto block = Sprite::create("block.png");
-//        
-//        auto blockBody = PhysicsBody::createBox(block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
-//        blockBody->getShape(0)->setDensity(10.0f);
-//        blockBody->getShape(0)->setFriction(0.0f);
-//        blockBody->getShape(0)->setRestitution(1.f);
-//        blockBody->setContactTestBitmask(1);
-//        blockBody->setDynamic(false);
+//        auto block = Brick::create();
+//        block->initBrickSprite("block.png");
+        auto brickFactory = new BrickFactory(this);
+        auto block = brickFactory->createBrick(1);
         
         int xOffset = padding + block->getContentSize().width / 2 + ((block->getContentSize().width + padding)*i);
         block->setPosition(xOffset, 450);
