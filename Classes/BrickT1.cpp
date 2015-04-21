@@ -14,6 +14,7 @@ BrickT1::BrickT1()
     density = 10.0f;
     friction = 0.0f;
     restitution = 1.0f;
+    hp = 2;
 }
 
 

@@ -28,7 +28,8 @@ protected:
     Sprite* brickSprite;
     PhysicsBody* brickBody;
     
-    int hp;
+    CC_SYNTHESIZE(int, hp, Hp)
+//    int hp;
     bool isDead;
     std::string  brickName;
     float density;

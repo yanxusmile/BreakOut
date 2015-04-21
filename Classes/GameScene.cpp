@@ -133,11 +133,17 @@ bool GameScene::onContactBegin( cocos2d::PhysicsContact &contact )
     {
         if (nodeA->getTag() == 3)
         {
-            nodeA->getParent()->removeFromParentAndCleanup(true);
+            auto node = dynamic_cast<BrickBase*>(nodeA->getParent());
+            CCLOG("HP: %d", node->getHp());
+            node->setHp(node->getHp()-1);
+//            nodeA->getParent()->removeFromParentAndCleanup(true);
         }
         else if (nodeB->getTag() == 3)
         {
-            nodeB->getParent()->removeFromParentAndCleanup(true);
+            auto node = dynamic_cast<BrickBase*>(nodeB->getParent());
+            CCLOG("HP: %d", node->getHp());
+            node->setHp(node->getHp()-1);
+//            nodeB->getParent()->removeFromParentAndCleanup(true);
         }
     }
         return true;
@@ -154,7 +160,7 @@ void GameScene::setBlock()
 //        block->initBrickSprite("block.png");
         auto brickFactory = new BrickFactory(this);
         auto block = brickFactory->createBrick(1);
-        
+//        CCLOG("HP: %d", block->getHp());
         int xOffset = padding + block->getContentSize().width / 2 + ((block->getContentSize().width + padding)*i);
         block->setPosition(xOffset, 450);
 //        block->setTag(3);

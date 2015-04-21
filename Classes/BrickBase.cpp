@@ -24,6 +24,9 @@ bool BrickBase::init()
     brickSprite->setTag(3);
     
     this->addChild(brickSprite);
+    
+    this->scheduleUpdate();
+
 
     
     return true;
@@ -33,7 +36,7 @@ void BrickBase::update(float dt)
 {
     if (hp <= 0)
     {
-        this->removeFromParent();
+        this->removeFromParentAndCleanup(true);
     }
         
 }
