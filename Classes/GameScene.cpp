@@ -8,7 +8,7 @@
 
 #include "GameScene.h"
 #include "BrickFactory.h"
-
+#include "GameOverScene.h"
 USING_NS_CC;
 
 Scene* GameScene::createScene()
@@ -57,7 +57,7 @@ bool GameScene::init()
 
     //set paddle
     paddle = Sprite::create("paddle.png");
-    paddle->setPosition(Point(visibleSize.width / 2, paddle->getContentSize().height / 2));
+    paddle->setPosition(Point(visibleSize.width / 2, paddle->getContentSize().height * 3 / 4));
     
     auto paddleBody = PhysicsBody::createEdgeBox(paddle->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
     paddleBody->getShape(0)->setRestitution(1.0f);
@@ -136,17 +136,15 @@ bool GameScene::onContactBegin( cocos2d::PhysicsContact &contact )
             auto node = dynamic_cast<BrickBase*>(nodeA->getParent());
             CCLOG("HP: %d", node->getHp());
             node->setHp(node->getHp()-1);
-//            nodeA->getParent()->removeFromParentAndCleanup(true);
         }
         else if (nodeB->getTag() == 3)
         {
             auto node = dynamic_cast<BrickBase*>(nodeB->getParent());
             CCLOG("HP: %d", node->getHp());
             node->setHp(node->getHp()-1);
-//            nodeB->getParent()->removeFromParentAndCleanup(true);
         }
     }
-        return true;
+    return true;
 }
 
 
@@ -207,10 +205,14 @@ void GameScene::PauseGame()
 
 void GameScene::GameOver()
 {
-    PauseGame();
+//    PauseGame();
     playButton->setPosition(Point(visibleSize.width/2,visibleSize.height/2-gameover->getContentSize().height));
     gameover->setVisible(true);
     isGameover = true;
+    
+    auto score = 1;
+    auto scene = GameOverScene::createScene( score );
+    Director::getInstance()->replaceScene( TransitionFade::create( 0.5, scene) );
 }
 
 void GameScene::StartGame()
@@ -227,17 +229,16 @@ void GameScene::StartGame()
     }
     else
     {
-//        this->unscheduleAllSelectors();
         Director::getInstance()->resume();
+        Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
         this->removeAllChildren();
         this->init();
-        Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
     }
 }
 
 void GameScene::update(float dt)
 {
-    if (ball->getPositionY() <= ball->getContentSize().height/2)
+    if (ball->getPositionY() <= ball->getContentSize().height * 3/4)
     {
         GameOver();
     }
