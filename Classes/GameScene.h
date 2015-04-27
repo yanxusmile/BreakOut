@@ -22,17 +22,20 @@ public:
     CREATE_FUNC(GameScene);
     
     Sprite* ball;
+    PhysicsBody* ballBody;
+    
     Sprite* paddle;
     
     void PauseGame();
     void GameOver();
-    void StartGame();
+    void ResumeGame();
     
-    bool isGameover;
+//    bool isGameover;
 //    bool isWin;
     
     void tick(float dt);
     
+    void ShootBall();
     
     
     

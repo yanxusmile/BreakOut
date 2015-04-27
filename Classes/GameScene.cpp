@@ -36,7 +36,7 @@ bool GameScene::init()
         return false;
     }
     
-    isGameover = false;
+//    isGameover = false;
     
     visibleSize = Director::getInstance()->getVisibleSize();
     origin = Director::getInstance()->getVisibleOrigin();
@@ -74,7 +74,7 @@ bool GameScene::init()
     ball = Sprite::create("CloseNormal.png");
     ball->setPosition(Point(visibleSize.width / 2, paddle->getContentSize().height+ball->getContentSize().height/2));
     
-    auto ballBody = PhysicsBody::createCircle(ball->getContentSize().width / 2.);
+    ballBody = PhysicsBody::createCircle(ball->getContentSize().width / 2.);
     ballBody->getShape(0)->setRestitution(1.0f);
     ballBody->getShape(0)->setFriction(0.0f);
     ballBody->getShape(0)->setDensity(1.0f);
@@ -84,10 +84,8 @@ bool GameScene::init()
     ball->setTag(1);
     this->addChild(ball);
     
-    
-    Vect force = Vect(1000000.0f, 1000000.0f);
-    ballBody->applyImpulse(force);
-    
+    //randomly shoot ball
+    ShootBall();
     
     //set blocks
     setBlock();
@@ -170,7 +168,7 @@ void GameScene::setUI(){
     pauseButton = MenuItemImage::create("PauseButton.png", "PauseButton.png", CC_CALLBACK_0(GameScene::PauseGame, this));
     pauseButton->setPosition(Point(visibleSize.width - pauseButton->getContentSize().width, visibleSize.height - pauseButton->getContentSize().height/2));
     
-    playButton = MenuItemImage::create("rePlayButton1.png", "rePlayButton2.png", CC_CALLBACK_0(GameScene::StartGame, this));
+    playButton = MenuItemImage::create("rePlayButton1.png", "rePlayButton2.png", CC_CALLBACK_0(GameScene::ResumeGame, this));
     playButton->setPosition(Point(visibleSize.width/2,visibleSize.height/2));
     playButton->setVisible(false);
     
@@ -208,32 +206,21 @@ void GameScene::GameOver()
 //    PauseGame();
     playButton->setPosition(Point(visibleSize.width/2,visibleSize.height/2-gameover->getContentSize().height));
     gameover->setVisible(true);
-    isGameover = true;
+//    isGameover = true;
     
     auto score = 1;
     auto scene = GameOverScene::createScene( score );
     Director::getInstance()->replaceScene( TransitionFade::create( 0.5, scene) );
 }
 
-void GameScene::StartGame()
+void GameScene::ResumeGame()
 {
-    if(!isGameover)
-    {
-        Director::getInstance()->resume();
-        playButton->setVisible(false);
-        pauseButton->setVisible(true);
-        ball->setVisible(true);
-        paddle->setVisible(true);
-        Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
-
-    }
-    else
-    {
-        Director::getInstance()->resume();
-        Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
-        this->removeAllChildren();
-        this->init();
-    }
+    Director::getInstance()->resume();
+    playButton->setVisible(false);
+    pauseButton->setVisible(true);
+    ball->setVisible(true);
+    paddle->setVisible(true);
+    Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(1);
 }
 
 void GameScene::update(float dt)
@@ -260,6 +247,12 @@ void GameScene::tick(float dt)
     {
         GameOver();
     }
+}
+
+void GameScene::ShootBall()
+{
+//    auto paddlePosition = paddle->getPosition();
+    ballBody->setVelocity(Vec2(random(-500, 500), 500));
 }
 
 
