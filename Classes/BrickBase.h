@@ -21,6 +21,8 @@ public:
     Size getContentSize();
     Sprite* getSprite();
     PhysicsBody* getPhysicsBody();
+    
+    unsigned int score;
 
     
     
@@ -29,7 +31,6 @@ protected:
     PhysicsBody* brickBody;
     
     CC_SYNTHESIZE(int, hp, Hp)
-//    int hp;
     bool isDead;
     std::string  brickName;
     float density;

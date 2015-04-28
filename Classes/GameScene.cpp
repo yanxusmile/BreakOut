@@ -37,6 +37,9 @@ bool GameScene::init()
     }
     
 //    isGameover = false;
+    dataManager = DataManager::getInstance();
+    dataManager->clear();
+    dataManager->setScore(0);
     
     visibleSize = Director::getInstance()->getVisibleSize();
     origin = Director::getInstance()->getVisibleOrigin();
@@ -101,6 +104,14 @@ bool GameScene::init()
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+    
+    //create and add score label
+    __String *tempScore = __String::createWithFormat( "%i", dataManager->getScore() );
+    scoreLabel = Label::createWithTTF( tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.1 );
+    scoreLabel->setColor( Color3B::WHITE );
+    scoreLabel->setPosition( Point( visibleSize.width /2 + origin.x, visibleSize.height * 0.75 + origin.y ) );
+    
+    this->addChild( scoreLabel, 10000 );
     
     this->scheduleUpdate();
     
@@ -208,8 +219,8 @@ void GameScene::GameOver()
     gameover->setVisible(true);
 //    isGameover = true;
     
-    auto score = 1;
-    auto scene = GameOverScene::createScene( score );
+//    auto score = 1;
+    auto scene = GameOverScene::createScene();
     Director::getInstance()->replaceScene( TransitionFade::create( 0.5, scene) );
 }
 
@@ -229,6 +240,11 @@ void GameScene::update(float dt)
     {
         GameOver();
     }
+    
+    __String *tempScore = __String::createWithFormat( "%i", dataManager->getScore());
+    
+    scoreLabel->setString( tempScore->getCString() );
+    
     tick(dt);
 }
 

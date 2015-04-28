@@ -7,6 +7,7 @@
 //
 
 #include "BrickBase.h"
+#include "DataManager.h"
 
 
 bool BrickBase::init()
@@ -36,9 +37,10 @@ void BrickBase::update(float dt)
 {
     if (hp <= 0)
     {
+        auto dataManager = DataManager::getInstance();
+        dataManager->setScore(dataManager->getScore() + score);
         this->removeFromParentAndCleanup(true);
     }
-        
 }
 
 Size BrickBase::getContentSize()

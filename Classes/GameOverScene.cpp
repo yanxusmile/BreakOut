@@ -8,13 +8,12 @@
 
 #include "GameOverScene.h"
 #include "GameScene.h"
+#include "DataManager.h"
 
 //global variable score
-static unsigned int score;
 
-Scene* GameOverScene::createScene(unsigned int tempScore)
+Scene* GameOverScene::createScene()
 {
-    score = tempScore;
 
     // 'scene' is an autorelease object
     auto scene = Scene::create();
@@ -38,6 +37,9 @@ bool GameOverScene::init()
     {
         return false;
     }
+    
+    auto dataManager = DataManager::getInstance();
+    auto score = dataManager->getScore();
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -68,7 +70,8 @@ bool GameOverScene::init()
     }
     
     def->flush();
-
+    
+    //create score label
     __String *tempScore = __String::createWithFormat( "%i", score );
     auto currentScore = Label::createWithTTF( tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.1 );
     currentScore->setPosition( Point( visibleSize.width * 0.25 +origin.x, visibleSize.height / 2 + origin.y ));

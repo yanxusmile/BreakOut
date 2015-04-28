@@ -10,6 +10,8 @@
 #define __BreakOut__GameScene__
 
 #include <stdio.h>
+#include "DataManager.h"
+
 USING_NS_CC;
 
 class GameScene : public cocos2d::Layer
@@ -37,7 +39,7 @@ public:
     
     void ShootBall();
     
-    
+    DataManager* dataManager;
     
 private:
     PhysicsWorld* sceneWorld;
@@ -61,6 +63,9 @@ private:
     Label* gameover;
     Label* gamewin;
     void setUI();
+    
+//    unsigned int score;
+    Label *scoreLabel;
     
     void update(float dt);
 };

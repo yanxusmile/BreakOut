@@ -15,7 +15,7 @@ USING_NS_CC;
 class GameOverScene : public Layer
 {
 public:
-    static Scene* createScene(unsigned int tempScore);
+    static Scene* createScene();
     
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
